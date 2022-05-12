@@ -22,4 +22,5 @@ Pod::Spec.new do |spec|
     spec.dependency "SwiftCBOR"
     spec.dependency "GzipSwift"
     spec.dependency "base45-swift"
+    spec.dependency "ASN1Decoder"
   end
