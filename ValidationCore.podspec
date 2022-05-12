@@ -15,7 +15,7 @@ Pod::Spec.new do |spec|
     spec.homepage     = "https://github.com/aboahab/ValidationCore"
     spec.license      = "Apache License"
     spec.authors            = { "abanob boles" => "abanob.boles@itsv.at" }
-    spec.ios.deployment_target = "13.0"
+    spec.ios.deployment_target = "12.0"
     spec.swift_version = '5.0'
     spec.source       = { :git => "https://github.com/aboahab/ValidationCore.git", :tag => "#{spec.version}" }
     spec.source_files  = "Sources/**/*.{swift}"
