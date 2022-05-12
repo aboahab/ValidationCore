@@ -1,5 +1,4 @@
 import base45_swift
-import CocoaLumberjackSwift
 import Gzip
 #if canImport(UIKit)
 import UIKit
@@ -23,7 +22,6 @@ public struct ValidationCore {
     public init(trustlistService: TrustlistService, dateService: DateService? = nil){
         self.dateService = dateService ?? DefaultDateService()
         self.trustlistService = trustlistService 
-        DDLog.add(DDOSLogger.sharedInstance)
    }
 
     //MARK: - Public API
@@ -39,7 +37,7 @@ public struct ValidationCore {
     
     /// Validate an Base45-encoded EHN health certificate
     public func validate(encodedData: String, _ completionHandler: @escaping (ValidationResult) -> ()) {
-        DDLogInfo("Starting validation")
+        print("Starting validation")
         guard let unprefixedEncodedString = removeScheme(prefix: PREFIX, from: encodedData) else {
             completionHandler(ValidationResult(isValid: false, metaInformation: nil, greenpass: nil, error: .INVALID_SCHEME_PREFIX))
             return
@@ -49,20 +47,20 @@ public struct ValidationCore {
             completionHandler(ValidationResult(isValid: false, metaInformation: nil, greenpass: nil, error: .BASE_45_DECODING_FAILED))
             return
         }
-        DDLogDebug("Base45-decoded data: \(decodedData.humanReadable())")
+        print("Base45-decoded data: \(decodedData.humanReadable())")
         
         guard let decompressedData = decompress(decodedData) else {
             completionHandler(ValidationResult(isValid: false, metaInformation: nil, greenpass: nil, error: .DECOMPRESSION_FAILED))
             return
         }
-        DDLogDebug("Decompressed data: \(decompressedData.humanReadable())")
+        print("Decompressed data: \(decompressedData.humanReadable())")
 
         guard let cose = cose(from: decompressedData),
               let keyId = cose.keyId else {
             completionHandler(ValidationResult(isValid: false, metaInformation: nil, greenpass: nil, error: .COSE_DESERIALIZATION_FAILED))
             return
         }
-        DDLogDebug("KeyID: \(keyId.encode())")
+        print("KeyID: \(keyId.encode())")
         
         guard let cwt = CWT(from: cose.payload),
               let euHealthCert = cwt.euHealthCert else {
@@ -109,7 +107,7 @@ public struct ValidationCore {
     /// Strips a given scheme prefix from the encoded EHN health certificate
     private func removeScheme(prefix: String, from encodedString: String) -> String? {
         guard encodedString.starts(with: prefix) else {
-            DDLogError("Encoded data string does not seem to include scheme prefix: \(encodedString.prefix(prefix.count))")
+            print("Encoded data string does not seem to include scheme prefix: \(encodedString.prefix(prefix.count))")
             return nil
         }
         return String(encodedString.dropFirst(prefix.count))
@@ -136,7 +134,7 @@ public struct ValidationCore {
 #if canImport(UIKit)
 extension ValidationCore : QrCodeReceiver {
     public func canceled() {
-        DDLogDebug("QR code scanning cancelled.")
+        print("QR code scanning cancelled.")
         completionHandler?(ValidationResult(isValid: false, metaInformation: nil, greenpass: nil, error: .USER_CANCELLED))
     }
     
@@ -144,7 +142,7 @@ extension ValidationCore : QrCodeReceiver {
     public func onQrCodeResult(_ result: String?) {
         guard let result = result,
               let completionHandler = self.completionHandler else {
-            DDLogError("Cannot read QR code.")
+            print("Cannot read QR code.")
             self.completionHandler?(ValidationResult(isValid: false, metaInformation: nil, greenpass: nil, error: .QR_CODE_ERROR))
             return
         }

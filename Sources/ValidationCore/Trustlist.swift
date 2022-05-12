@@ -8,7 +8,6 @@
 import Foundation
 import SwiftCBOR
 import ASN1Decoder
-import CocoaLumberjackSwift
 
 public struct TrustList : SignedData, Codable {
     public let entries : [TrustEntry]
@@ -67,7 +66,7 @@ public struct TrustEntry : Codable {
                 return nil != certificate.extensionObject(oid: OID_RECOVERY) || nil != certificate.extensionObject(oid: OID_ALT_RECOVERY)
             }
         }
-        DDLogDebug("Using trustlist certificate \(self.cert.base64EncodedString()) for validation")
+        print("Using trustlist certificate \(self.cert.base64EncodedString()) for validation")
         return true
     }
     

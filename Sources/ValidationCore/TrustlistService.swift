@@ -7,7 +7,6 @@
 
 import Foundation
 import SwiftCBOR
-import CocoaLumberjackSwift
 import Security
 
 public protocol TrustlistService {
