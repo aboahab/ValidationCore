@@ -18,7 +18,6 @@ let package = Package(
         .package(url: "https://github.com/CocoaLumberjack/CocoaLumberjack.git", .upToNextMajor(from: "3.7.0")),
         .package(name: "Gzip", url: "https://github.com/1024jp/GzipSwift", .upToNextMajor(from: "5.1.1")),
         .package(url: "https://github.com/eu-digital-green-certificates/SwiftCBOR", .branch("master")),
-        .package(url: "https://github.com/ehn-dcc-development/DccCachingService", .branch("main")),
         .package(url: "https://github.com/filom/ASN1Decoder", .upToNextMajor(from: "1.8.0")),
         .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "9.0.0")),
         .package(url: "https://github.com/Quick/Quick", .upToNextMajor(from: "3.1.2")),
@@ -31,8 +30,7 @@ let package = Package(
                            .product(name: "CocoaLumberjackSwift", package: "CocoaLumberjack"),
                            "ASN1Decoder",
                            "Gzip",
-                           "SwiftCBOR",
-                           "DccCachingService"
+                           "SwiftCBOR"
             ]),
         .testTarget(
             name: "ValidationCoreTests",
